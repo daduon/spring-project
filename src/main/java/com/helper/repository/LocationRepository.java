@@ -5,11 +5,11 @@ import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import com.helper.model.Location;
 
 import jakarta.transaction.Transactional;
-import org.springframework.data.repository.query.Param;
 
 @Transactional
 public interface LocationRepository extends JpaRepository<Location, Long> {
@@ -30,10 +30,10 @@ public interface LocationRepository extends JpaRepository<Location, Long> {
     // update location by id
     @Modifying
     @Query(value = "UPDATE locations SET name = :name, description = :description WHERE id = :id", nativeQuery = true)
-    void updateLocation(@Param("id") Long id, @Param("name") String name, @Param("description") String description);
+    int updateLocation(@Param("id") Long id, @Param("name") String name, @Param("description") String description);
 
     // delete location by id
     @Modifying
     @Query(value = "DELETE FROM locations lo WHERE lo.id = :id", nativeQuery = true)
-    void deleteLocation(@Param("id") Long id);
+    int deleteLocation(@Param("id") Long id);
 }
