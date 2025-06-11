@@ -3,7 +3,7 @@ package com.helper.checkResponse;
 import java.time.LocalDateTime;
 
 public class BaseRestFactory {
-        public static <T> BaseRest<T> success(T data) {
+    public static <T> BaseRest<T> success(T data) {
         return BaseRest.<T>builder()
             .status(true)
             .code(200)
