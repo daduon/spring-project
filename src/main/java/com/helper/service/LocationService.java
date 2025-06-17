@@ -1,7 +1,11 @@
 package com.helper.service;
 
 import java.util.List;
+
 import org.springframework.stereotype.Service;
+
+import com.helper.checkResponse.BaseRest;
+import com.helper.checkResponse.BaseRestFactory;
 import com.helper.model.Location;
 import com.helper.repository.LocationRepository;
 
@@ -14,28 +18,37 @@ public class LocationService {
         this.locationRepository = locationRepository;
     }
 
-    public List<Location> getLocationList() {
-        return locationRepository.listLocation();
+    public BaseRest<List<Location>> getLocationList() {
+        return BaseRestFactory.success(locationRepository.listLocation());
     }
 
-    public Location getLocationById(Long id) {
-        return locationRepository.findLocationById(id);
+    public BaseRest<Location> getLocationById(Long id) {
+        return BaseRestFactory.success(locationRepository.findLocationById(id));
     }
 
-    public void createLocation(Location location) {
+    public BaseRest<Location> createLocation(Location location) {
         locationRepository.createLocation(location.getName(), location.getDescription());
+        return BaseRestFactory.success(location);
     }
 
-    public void updateLocation(Long id, Location location) {
-        locationRepository.updateLocation(id, location.getName(), location.getDescription());
+    public BaseRest<Location> updateLocation(Long id, Location location) {
+        int updated = locationRepository.updateLocation(id, location.getName(), location.getDescription());
+        if (updated == 0) {
+            throw new IllegalArgumentException("Location with ID " + id + " not found.");
+        }
+        location.setId(id);
+        return BaseRestFactory.success(location);
     }
 
-    public Location deleteLocation(Long id) {
+    public BaseRest<Location> deleteLocation(Long id) {
         Location location = locationRepository.findLocationById(id);
         if (location == null) {
             throw new IllegalArgumentException("Location with id " + id + " does not exist");
         }
-        locationRepository.deleteLocation(id);
-        return location;
+        int deleted = locationRepository.deleteLocation(id);
+        if (deleted == 0) {
+            throw new RuntimeException("Failed to delete location with id " + id);
+        }
+        return BaseRestFactory.success(location);
     }
 }

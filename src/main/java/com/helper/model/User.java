@@ -1,5 +1,7 @@
 package com.helper.model;
 
+import java.util.List;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -14,6 +16,7 @@ public class User {
     private Long id;
     private String username;
     private String password;
+    private List<String> roles;
 
     public Long getId() {
         return this.id;
@@ -39,4 +42,11 @@ public class User {
         this.password = password;
     }
 
+    public List<String> getRoles() {
+        return this.roles;
+    }
+
+    public void setRoles(List<String> roles) {
+        this.roles = roles;
+    }
 }
